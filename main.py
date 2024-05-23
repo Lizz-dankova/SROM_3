@@ -82,19 +82,29 @@ def power(poly_1, poly_3):
         current_power = square(current_power)
     return result
 
+def mod_polynomial(dividend, divisor):
+    dividend = list(map(int, dividend))
+    divisor = list(map(int, divisor))
+    while len(dividend) >= len(divisor):
+        if dividend[0] == 1:
+            for i in range(len(divisor)):
+                dividend[i] ^= divisor[i]
+        dividend.pop(0)
+    return ''.join(map(str, dividend)).lstrip('0') or '0'
 
-def optimized_reverse(poly_1):
-    # Optimized exponentiation using square and multiply
-    result = '1'.zfill(233)
-    base = poly_1
-    exponent = 2 ** 233 - 2
+def extended_gcd(a, b):
+    if b == '0':
+        return a, '1', '0'
+    else:
+        gcd, x1, y1 = extended_gcd(b, mod_polynomial(a, b))
+        x = y1
+        y = addition(x1, mul(y1, mod_polynomial(a, b)))
+        return gcd, x, y
 
-    while exponent > 0:
-        if exponent % 2 == 1:
-            result = mul(result, base)
-        base = square(base)
-        exponent //= 2
-
+def reverse(poly, mod):
+    poly = poly.lstrip('0') or '0'
+    gcd, inv, _ = extended_gcd(mod, poly)
+    return inv.zfill(233)
     return result
 
 
@@ -108,7 +118,7 @@ def trace(poly):
 poly1_str = "110101110"
 poly2_str = "101001000"
 poly3_str = '100001101'
-
+mod_str = '10000000011'
 add_result, add_time = measure_time(addition, poly1_str, poly2_str)
 print(f'Addition:  {add_result}')
 print(f'Time taken for Addition: {add_time} seconds')
@@ -121,7 +131,7 @@ sq_result, sq_time = measure_time(square, poly1_str)
 print(f'Square:  {sq_result}')
 print(f'Time taken for Square: {sq_time} seconds')
 
-reverse_result, reverse_time = measure_time(optimized_reverse, poly1_str)
+reverse_result, reverse_time = measure_time(reverse, poly1_str, mod_str)
 print(f'Reverse:  {reverse_result}')
 print(f'Time taken for Reverse: {reverse_time} seconds')
 
