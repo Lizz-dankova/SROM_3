@@ -1,6 +1,6 @@
 import time
 
-# Поліном для вашого поля (x^233 + x^9 + x^4 + x + 1)
+# Генератор поля (x^233 + x^9 + x^4 + x + 1)
 mod_polynomial = '10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100101001000000000000001'
 
 def measure_time(func, *args):
@@ -13,20 +13,18 @@ def measure_time(func, *args):
 def addition(poly_1, poly_2):
     poly_1 = poly_1.zfill(233)
     poly_2 = poly_2.zfill(233)
-    result = ''
-    for i in range(233):
-        result += str(int(poly_1[i]) ^ int(poly_2[i]))
+    result = ''.join(str(int(a) ^ int(b)) for a, b in zip(poly_1, poly_2))
     return result.lstrip('0') or '0'
 
 def left_shift(number, shift):
     return (number[shift:] + '0' * shift)[:233]
 
 def mod_polynomial_func(dividend, divisor=mod_polynomial):
+    divisor_len = len(divisor)
     dividend = list(dividend)
-    divisor = list(divisor)
-    while len(dividend) >= len(divisor):
+    while len(dividend) >= divisor_len:
         if dividend[0] == '1':
-            for i in range(len(divisor)):
+            for i in range(divisor_len):
                 dividend[i] = str(int(dividend[i]) ^ int(divisor[i]))
         dividend.pop(0)
     return ''.join(dividend).lstrip('0') or '0'
@@ -43,9 +41,7 @@ def mul(a, b):
     return mod_polynomial_func(result, mod_polynomial)
 
 def square(bitstring):
-    # Step 1: Interleave bitstring with zeros
     interleaved = ''.join(bit + '0' for bit in bitstring[:-1]) + bitstring[-1]
-    # Step 2: Reduce modulo the field polynomial
     return mod_polynomial_func(interleaved, mod_polynomial)
 
 def power(poly_1, poly_3):
