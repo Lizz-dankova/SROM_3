@@ -1,7 +1,7 @@
 import time
 
 # Генератор поля (x^233 + x^9 + x^4 + x + 1)
-mod_polynomial = '10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100101001000000000000001'
+mod_polynomial = '100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000010011'
 
 def measure_time(func, *args):
     start_time = time.time()
@@ -75,29 +75,29 @@ def reverse(poly):
 def trace(poly):
     return str(sum(map(int, poly)) % 2)
 
-poly1_str = "10010101100010111110100110110100001010011111111111110100001100010111100111101110011010011011111001001000010010110100111000000101011001111100100010110001001011010110001100010001001111101010111110111110010010010111011000110011001000111"
-poly2_str = "00000111001000110001011110101101011001011100010110000100110110100000101110111011111011011101010100100101001011100000111011101110001001001111110001100100001110100100011011101110110001001110101110001101010111100011110101111011000110010"
-poly3_str = '00100101101100101010001010110111011111001001001101011111101100001111001010101101010110111101001101011000110000100100011101101100011110010010011001110011111101111100100100011011100101101000000111110000100101100101001011101010011111001'
+poly1 = str(input("Enter the first polynomial: "))
+poly2 = str(input("Enter the second polynomial: "))
+poly3 = str(input("Enter the third polynomial: "))
 
-add_result, add_time = measure_time(addition, poly1_str, poly2_str)
+add_result, add_time = measure_time(addition, poly1, poly2)
 print(f'Addition:  {add_result}')
 print(f'Time taken for Addition: {add_time} seconds')
 
-mul_result, mul_time = measure_time(mul, poly1_str, poly2_str)
+mul_result, mul_time = measure_time(mul, poly1, poly2)
 print(f'Multiply:  {mul_result}')
 print(f'Time taken for Multiply: {mul_time} seconds')
 
-sq_result, sq_time = measure_time(square, poly1_str)
+sq_result, sq_time = measure_time(square, poly1)
 print(f'Square:  {sq_result}')
 print(f'Time taken for Square: {sq_time} seconds')
 
 try:
-    reverse_result, reverse_time = measure_time(reverse, poly1_str)
+    reverse_result, reverse_time = measure_time(reverse, poly1)
     print(f'Reverse:  {reverse_result}')
     print(f'Time taken for Reverse: {reverse_time} seconds')
 except ValueError as e:
     print(e)
 
-pow_result, pow_time = measure_time(power, poly1_str, poly3_str)
+pow_result, pow_time = measure_time(power, poly1, poly3)
 print(f'Power:  {pow_result}')
 print(f'Time taken for Power: {pow_time} seconds')
